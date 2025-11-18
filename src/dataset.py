@@ -1,29 +1,8 @@
-import torch
 import torchvision
 from torch.utils.data import Subset
 import torchvision.transforms as transforms
 
-def load_cifar10():
-    transform = transforms.ToTensor()
-
-    # Load training set
-    trainset = torchvision.datasets.CIFAR10(
-        root="./data",
-        train=True,
-        download=True,
-        transform=transform
-    )
-
-    # Load test set
-    testset = torchvision.datasets.CIFAR10(
-        root="./data",
-        train=False,
-        download=True,
-        transform=transform
-    )
-
-    return trainset, testset
-
+# function to help get desired number of images for training and test dataset
 def select_n_per_class(dataset, n_per_class, num_classes=10):
     labels = dataset.targets
     selected_indices = []

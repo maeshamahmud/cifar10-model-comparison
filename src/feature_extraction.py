@@ -7,6 +7,7 @@ from sklearn.decomposition import PCA
      
 train_balanced, test_balanced = get_balanced_cifar10()
 
+# transform to 224 x 224 and normalize
 def get_resnet_transform():
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -17,9 +18,10 @@ def get_resnet_transform():
     ])
     return transform
 
+# get the resnet18 pretrained
 def build_resnet_feature_extractor():
     model = models.resnet18(pretrained=True)
-    model.fc = torch.nn.Identity()
+    model.fc = torch.nn.Identity() #remove last layer
     model.eval()
     return model
 
