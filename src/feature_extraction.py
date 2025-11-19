@@ -1,5 +1,6 @@
 import torchvision.transforms as transforms
 import torchvision.models as models
+from torchvision.models import ResNet18_Weights
 import torch
 from dataset import get_balanced_cifar10
 import numpy as np
@@ -20,7 +21,7 @@ def get_resnet_transform():
 
 # get the resnet18 pretrained
 def build_resnet_feature_extractor():
-    model = models.resnet18(pretrained=True)
+    model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
     model.fc = torch.nn.Identity() #remove last layer
     model.eval() #not training
     return model
