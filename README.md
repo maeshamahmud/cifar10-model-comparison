@@ -9,17 +9,6 @@ This project follows the requirements to:
 - Compare performance across all models  
 - Report accuracy, precision, recall, F1-score, and confusion matrices  
 
-Project Structure
-src/
-├── dataset.py
-├── feature_extraction.py
-├── naive_bayes_manual.py
-├── naive_bayes_sklearn.py
-├── decision_tree_manual.py
-├── evaluation.py
-└── main.py
-
-
 Prepping Data:
 1. get 500 training and 100 test images for each 10 classes
 2. convert to tensors from PIL
