@@ -43,16 +43,19 @@ def extract_resnet_features(dataset, model, transform):
         y = np.array(labels_list)
     return X,y
 
-transform = get_resnet_transform()
-model = build_resnet_feature_extractor()
+def prepare_features():
+    train_balanced, test_balanced = get_balanced_cifar10()
+    transform = get_resnet_transform()
+    model = build_resnet_feature_extractor()
 
-# X -> (5000,512)
-# y -> (5000)
+    # X -> (5000,512)
+    # y -> (5000)
+    X_train_512, y_train = extract_resnet_features(train_balanced, model, transform)
+    X_test_512, y_test   = extract_resnet_features(test_balanced, model, transform)
+    
+    #2d numpy array, reduce 512 features to 50 using PCA
+    pca = PCA(n_components=50)
+    X_train_50 = pca.fit_transform(X_train_512)
+    X_test_50  = pca.transform(X_test_512)
 
-X_train_512, y_train = extract_resnet_features(train_balanced, model, transform)
-X_test_512, y_test = extract_resnet_features(test_balanced, model, transform)
-
-#2d numpy array, reduce 512 features to 50 using PCA
-pca = PCA(n_components=50)
-X_train_50 = pca.fit_transform(X_train_512)
-X_test_50 = pca.transform(X_test_512)
+    return X_train_50, X_test_50, y_train, y_test
