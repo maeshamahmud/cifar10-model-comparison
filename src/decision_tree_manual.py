@@ -2,31 +2,22 @@ import numpy as np
 
 
 class ManualDecisionTree:
+    # there's a max depth of 50 to prevent infinite overfitting
     def __init__(self, max_depth=50, min_samples_split=2):
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.tree_ = None
-
-    # ---------- Public API ---------- #
-
+    
+    # training the whole tree
     def fit(self, X, y):
-        """
-        X: (N, D) NumPy array
-        y: (N,)   NumPy array of labels
-        """
         self.classes_ = np.unique(y)
         self.n_features_ = X.shape[1]
         self.tree_ = self._build_tree(X, y, depth=0)
 
     def predict(self, X):
-        """
-        X: (N, D) NumPy array
-        Returns: (N,) predicted labels
-        """
         return np.array([self._predict_one(x, self.tree_) for x in X])
 
-    # ---------- Tree building ---------- #
-
+    
     def _build_tree(self, X, y, depth):
         num_samples = X.shape[0]
         num_labels = len(np.unique(y))
@@ -69,10 +60,6 @@ class ManualDecisionTree:
         }
 
     def _best_split(self, X, y):
-        """
-        Try all features and candidate thresholds, pick the one
-        with maximum Gini information gain.
-        """
         m, n_features = X.shape
         if m <= 1:
             return None, None, 0.0, None
@@ -117,8 +104,6 @@ class ManualDecisionTree:
 
         return best_feat, best_thresh, best_gain, best_sets
 
-    # ---------- Impurity & gain ---------- #
-
     def _gini(self, y):
         """
         Gini impurity of a label array y.
@@ -142,8 +127,6 @@ class ManualDecisionTree:
         g_right = self._gini(y_right)
         weighted_gini = (len(y_left) / m) * g_left + (len(y_right) / m) * g_right
         return parent_gini - weighted_gini
-
-    # ---------- Utils ---------- #
 
     def _most_common_label(self, y):
         vals, counts = np.unique(y, return_counts=True)
